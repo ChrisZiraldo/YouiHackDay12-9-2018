@@ -127,11 +127,18 @@ app.get('/DestroyRoom', function(req, res) {
 });
 
 app.post('/join', function(req, res) {
-    JoinRoom(req.body.Name);
-    res.json({
-        Id: CurrentID - 1,
-        Name: req.body.Name
-    });
+    if(Users.length < 2)
+    {
+        JoinRoom(req.body.Name);
+        res.json({
+            Id: CurrentID - 1,
+            Name: req.body.Name
+        });
+    }
+    else
+    {
+        res.end('false');
+    }
 });
 
 function JoinRoom(name) {

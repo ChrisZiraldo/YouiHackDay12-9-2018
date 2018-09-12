@@ -1,0 +1,43 @@
+{>"layout" /}
+
+{<body}
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<h1 style="text-align:center" id="Title">Welcome to Coalition Fight!</h1>
+
+
+	<div class="floatCenterbox">
+     	<div class="section-with-bg" style="text-align:center" id="sectionBox"> 
+
+     		<font size="5" id="BoxInfo">Enter a Username to Play</font> 
+    		</br>
+    		</br>
+
+            <input type="text" class="form-control" id="username" placeholder="Username">
+    		</br>
+    	<button type="button" class="btn btn-success btn-large center-block" id="Play">Play</button>
+
+        </div> 
+    </div> 
+      
+    
+    <div class="section" style="text-align:center"> 
+		<img src="/img/Bullet.png" id="bulletImg"> <font size="20" id="AmmoCount"></font> 
+	</div>
+
+    <button type="button" class="btn btn-danger btn-massive center-block" id="FireBtn">Fire</button>
+	</br>
+    <button type="button" class="btn btn-warning btn-massive center-block" id="ReloadBtn">Reload</button>
+
+
+
+
+    <!--<div class="section" style="text-align:center">
+    	</br>
+			<img src="/img/Cannon.png" class="tint">
+	</div>-->
+
+   <!-- <h1 id="Output">{}</h1> -->
+
+{/body}

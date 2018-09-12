@@ -1,0 +1,33 @@
+body {
+  margin-top: 10px;
+}
+
+.btn-massive {
+  padding: 10px 16px;
+  font-size: 75px;
+  line-height: 1.3333333;
+  border-radius: 8px;
+  width: 75%;
+}
+
+.btn-large {
+  padding: 10px 16px;
+  font-size: 50px;
+  line-height: 1.3333333;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.floatCenterbox {
+  position: absolute;
+  top: 50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+}
+
+.section-with-bg {
+  border-radius: 8px;
+  background: #eee;
+  padding: 1em;
+  margin: -7em;
+}

@@ -4,7 +4,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<h1 style="text-align:center" id="Title">Welcome to Coalition Fight!</h1>
+	<h1 style="text-align:center" id="Title1">Welcome to the Barton-Zirdoli</h1>
+    <h1 style="text-align:center" id="Title2">Rock, Paper, Scissors Simulator!</h1>
 
 
 	<div class="floatCenterbox">
@@ -19,18 +20,55 @@
     	<button type="button" class="btn btn-success btn-large center-block" id="Play">Play</button>
 
         </div> 
-    </div> 
-      
+    </div>
+
+
+    <h1 style="text-align:center" id="WaitingText"> Waiting for Player 2</h1>
+        </br>
+        </br>
+    <div class="section" style="text-align:center">
+        </br>
+            <img src="https://loading.io/spinners/double-ring/lg.double-ring-spinner.gif" id="Spinner" class="tint">
+    </div>
+
     
+      
+    <!--
     <div class="section" style="text-align:center"> 
 		<img src="/img/Bullet.png" id="bulletImg"> <font size="20" id="AmmoCount"></font> 
 	</div>
+    -->
 
-    <button type="button" class="btn btn-danger btn-massive center-block" id="FireBtn">Fire</button>
+    <button type="button" style="display:none" class="btn btn-danger btn-massive center-block" id="RockBtn">Rock</button>
 	</br>
-    <button type="button" class="btn btn-warning btn-massive center-block" id="ReloadBtn">Reload</button>
+    <button type="button" style="display:none" class="btn btn-warning btn-massive center-block" id="PaperBtn">Paper</button>
+    </br>
+    <button type="button" style="display:none" class="btn btn-success btn-massive center-block" id="ScissorsBtn">Scissors</button>
 
 
+        <div class="section" style="text-align:center">
+             <h1 id="ChoiceText"> asd </h1>
+             <img src="" id="ResultImage"/>
+             </br>
+             </br>
+             <button type="button" style="display:none" class="btn btn-info btn-largeFloating center-block" id="PlayAgain">Play Again?</button>
+        </div>
+
+<!--
+    <div class="section" style="text-align:center">
+        <button class="btn">
+             <img src="https://www.campcanary.co.uk/uploads/rock-icon-grey.png" id="RockBtn"/>
+        </button>
+        </br>
+        <button class="btn">
+             <img src="https://www.campcanary.co.uk/uploads/paper-icon-grey.png" id="PaperBtn"/>
+        </button>
+        </br>
+        <button class="btn">
+             <img src="https://www.campcanary.co.uk/uploads/scissors-icon-grey.png" id="ScissorsBtn"/>
+        </button>
+    </div>
+-->
 
 
     <!--<div class="section" style="text-align:center">

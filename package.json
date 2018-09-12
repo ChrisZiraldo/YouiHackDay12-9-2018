@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "description": "Starting point for node applications using dust.",
   "main": "app.js",
-  "scripts": { 
-    "start": "node app.js" 
-  }, 
+  "scripts": {
+    "start": "node app.js"
+  },
   "author": "Crabs Zimbabwe Inc.",
   "license": "ISC",
   "dependencies": {

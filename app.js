@@ -14,76 +14,136 @@ app.set('views', __dirname + '/views');
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false}));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 
-app.get('/', function (req, res) {
-  res.render('index');
+app.get('/', function(req, res) {
+    res.render('index');
 });
 
 var Users = [];
 var CurrentID = 0;
 var CurrentTeam = 0;
 
-function JoinRoom(name)
-{
-	Users.push({Id: CurrentID, Team: CurrentTeam, Name: name, Fired: 0});
-
-	CurrentID++;
-	if(CurrentTeam == 0)
-		CurrentTeam = 1;
-	else
-		CurrentTeam = 0
+function ResetRoom() {
+Users = [];
+    CurrentID = 0;
 }
 
-app.get('/reset', function (req, res) {
-  	Users = [];
-	CurrentID = 0;
-	CurrentTeam = 0;
+app.get('/CreateRoom', function(req, res) {
+    ResetRoom();
+    res.end('true');
 });
 
-app.post('/join', function (req, res) {
-  JoinRoom(req.body.Name);
-  res.json({Id: CurrentID-1, Team: CurrentTeam});
+app.get('/GetPlayerInfo', function(req, res) {
+    var userinfo = [];
+
+    for (var i = 0; i < Users.length; i++) {
+        userinfo.push({
+            Id: Users[i].Id,
+            Name: Users[i].Name
+        });
+    }
+
+    res.send(userinfo);
 });
 
-app.post('/remove', function (req, res) {
+app.get('/GetPlayerCount', function(req, res) {
+    res.send({Count: Users.length});
+});
 
-	for(var i = 0; i < Users.length; i++)
-	{
-		if(Users[i].Id == parseInt(req.body.Id))
-		{
-			Users.splice(i, 1);
-		}
-	}
+app.get('/GetGameOver', function(req, res) {
+    if(Users.length > 0)
+    {
+        res.send({GameOver: false});
+    }
+    else
+    {
+        res.send({GameOver: true});
+    }
+});
+
+app.post('/SubmitResults', function(req, res) {
+
+    for (var i = 0; i < Users.length; i++) {
+        if (Users[i].Id == parseInt(req.body.Id)) {
+            Users[i].Choice = parseInt(req.body.Choice)
+        }
+    }
+
+    console.log(Users);
+
+    res.end('true');
+});
+
+app.get('/GetResults', function(req, res) {
+    var userinfo = [];
+
+    for (var i = 0; i < Users.length; i++) {
+        userinfo.push({
+            Id: Users[i].Id,
+            Choice: Users[i].Choice
+        });
+    }
+
+    res.send(userinfo);
+});
+
+app.get('/FakeGetPlayerInfo', function(req, res) {
+    var userinfo = [];
+
+    userinfo.push({
+        Id: 0,
+        Name: "Chris"
+    });
+    userinfo.push({
+        Id: 1,
+        Name: "Dave"
+    });
  
-  res.end('true');
+    res.send(userinfo);
+});
+
+app.get('/FakeGetResults', function(req, res) {
+    var userinfo = [];
+
+    userinfo.push({
+        Id: 0,
+        Choice: 0
+    });
+    userinfo.push({
+        Id: 1,
+        Choice: 0
+    });
+
+    res.send(userinfo);
 });
 
 
-app.get('/getInfo', function (req, res) {
-  res.send(Users);
-
-	for(var i = 0; i < Users.length; i++)
-	{
-		Users[i].Fired = 0;
-	}
+app.get('/DestroyRoom', function(req, res) {
+    ResetRoom();
+    res.end('true');
 });
 
-
-app.post('/fireEvent',function(req,res){
-
-	for(var i = 0; i < Users.length; i++)
-	{
-		if(Users[i].Id == parseInt(req.body.Id))
-		{
-			Users[i].Fired = parseInt(req.body.Fired)
-		}
-	}	
-
-	res.end('true');
-
+app.post('/join', function(req, res) {
+    JoinRoom(req.body.Name);
+    res.json({
+        Id: CurrentID - 1,
+        Name: req.body.Name
+    });
 });
 
-app.listen(3000, function () {
-  console.log('Server Started On Port 3000');
+function JoinRoom(name) {
+    Users.push({
+        Id: CurrentID,
+        Name: name,
+        Choice: 0
+    });
+    CurrentID++;
+    console.log("JOined");
+}
+
+app.listen(3000, function() {
+    console.log('Server Started On Port 3000');
 });

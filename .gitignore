@@ -2,3 +2,10 @@
 node_modules/
 
 package-lock\.json
+
+Unity/YouiBox/Library
+Unity/YouiBox/Temp
+Unity/YouiBox/obj
+Unity/YouiBox/YouiBox.sln
+Unity/YouiBox/.vs
+Unity/YouiBox/*.csproj

@@ -1,2 +1,1 @@
-# Welcome to the Barton-Zirdoli
-# Rock, Paper, Scissors Simulator!
+# Welcome to the Barton-Zirdoli Rock, Paper, Scissors Simulator!

@@ -21,30 +21,52 @@ public class WaitForPlayers : GameState
         base.EnterState();
 
         GameData.Instance.PlayerDataRefreshed += OnPlayerDataRefreshed;
-        GameData.Instance.RefreshPlayerData();
+
+        OnPlayerDataRefreshed();
     }
 
     public override void ExitState()
     {
         GameData.Instance.PlayerDataRefreshed -= OnPlayerDataRefreshed;
+
         base.ExitState();
     }
 
     void OnPlayerDataRefreshed()
     {
-        if (GameData.Instance.m_players.Count >= GameData.MAX_PLAYERS)
+        int playerCount = GameData.Instance.PlayerCount;
+        for (int i = 0; i < playerCount; i++)
+        {
+            PlayerData data = GameData.Instance.GetPlayerDataForID(i);
+            SetPlayerData(data);
+        }
+
+        if (GameData.Instance.PlayerCount >= GameData.MAX_PLAYERS)
         {
             m_gameStateMgr.ChangeState(GameStateID.Play);
         }
         else
         {
-            StartCoroutine(RecheckPlayerData(m_checkIntervalSeconds));
+            StartCoroutine(RecheckPlayerData());
+        }
+    } 
+
+    IEnumerator RecheckPlayerData()
+    {
+        yield return new WaitForSecondsRealtime(m_checkIntervalSeconds);
+        GameData.Instance.RefreshPlayerData();
+    }
+
+    void SetPlayerData(PlayerData data)
+    {
+        int index = data.ID;
+
+        if (index < m_gameStateMgr.m_playerControllers.Count)
+        {
+            PlayerCtrl player = m_gameStateMgr.m_playerControllers[data.ID];
+            player.SetName(data.Name);
         }
     }
 
-    IEnumerator RecheckPlayerData(float interval)
-    {
-        yield return new WaitForSecondsRealtime(interval);
-        GameData.Instance.RefreshPlayerData();
-    }
+
 }

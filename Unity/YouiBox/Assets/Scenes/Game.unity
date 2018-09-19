@@ -300,6 +300,10 @@ Prefab:
       propertyPath: m_associatedPlayerID
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_id
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c3b2c18c90324059b444cca316e77e7, type: 2}
   m_IsPrefabAsset: 0
@@ -452,6 +456,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8adea7166053742abb0be0eae6f2df64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_playerControllers:
+  - {fileID: 698971307}
+  - {fileID: 1393062120}
 --- !u!4 &653515734
 Transform:
   m_ObjectHideFlags: 0
@@ -509,6 +516,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_gameStateMgr: {fileID: 653515733}
+--- !u!114 &698971307 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114047700595401780, guid: 1c3b2c18c90324059b444cca316e77e7,
+    type: 2}
+  m_PrefabInternal: {fileID: 1481838896}
+  m_Script: {fileID: 11500000, guid: 8457a0041d3f740eda7887831622c018, type: 3}
 --- !u!1 &885076508
 GameObject:
   m_ObjectHideFlags: 0
@@ -571,7 +584,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1100032165
+--- !u!224 &1100032166 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 224543255194124724, guid: 1c3b2c18c90324059b444cca316e77e7,
+    type: 2}
+  m_PrefabInternal: {fileID: 1481838896}
+--- !u!114 &1393062120 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114047700595401780, guid: 1c3b2c18c90324059b444cca316e77e7,
+    type: 2}
+  m_PrefabInternal: {fileID: 250386311}
+  m_Script: {fileID: 11500000, guid: 8457a0041d3f740eda7887831622c018, type: 3}
+--- !u!1001 &1481838896
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -675,11 +699,6 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c3b2c18c90324059b444cca316e77e7, type: 2}
   m_IsPrefabAsset: 0
---- !u!224 &1100032166 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 224543255194124724, guid: 1c3b2c18c90324059b444cca316e77e7,
-    type: 2}
-  m_PrefabInternal: {fileID: 1100032165}
 --- !u!1 &1670141925
 GameObject:
   m_ObjectHideFlags: 0

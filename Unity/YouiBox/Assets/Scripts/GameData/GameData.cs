@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define OFFLINE_MODE
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,8 +16,7 @@ public class GameData : MonoBehaviour
     public event Action PlayerDataRefreshed = null;
     public event Action PlayerChoiceRefreshed = null;
 
-    public event Action<PlayerData> PlayerDataAdded = null;
-    public event Action<PlayerData> PlayerDataRemoved = null;
+    public Dictionary<int, PlayerData> m_playerData = new Dictionary<int, PlayerData>(2);
 
     public static GameData Instance
     {
@@ -25,30 +26,24 @@ public class GameData : MonoBehaviour
         }
     }
 
+    public int PlayerCount { get { return m_playerData.Count; } }
+
     private void Awake()
     {
         m_instance = this;
     }
 
-    public Dictionary<int, PlayerData> m_players = new Dictionary<int, PlayerData>(2);
-
-    public void AddPlayer(int playerID, PlayerData playerData)
+    void AddPlayer(int playerID, PlayerData playerData)
     {
-        m_players[playerID] = playerData;
+        m_playerData[playerID] = playerData;
 
-        if (PlayerDataAdded != null)
-            PlayerDataAdded(playerData);
     }
 
-    public void RemovePlayer(int playerID)
+    void RemovePlayer(int playerID)
     {
-        if (m_players.ContainsKey(playerID))
+        if (m_playerData.ContainsKey(playerID))
         {
-            PlayerData data = m_players[playerID];
-            m_players.Remove(playerID);
-
-            if (PlayerDataRemoved != null)
-                PlayerDataRemoved(data);
+            m_playerData[playerID] = null;
         }
     }
 
@@ -56,8 +51,8 @@ public class GameData : MonoBehaviour
     {
         PlayerData data = null;
 
-        if (m_players.ContainsKey(playerID))
-            data = m_players[playerID];
+        if (m_playerData.Count > playerID)
+            data = m_playerData[playerID];
 
         return data;
     }
@@ -69,6 +64,14 @@ public class GameData : MonoBehaviour
 
     IEnumerator CreateRoom_crt()
     {
+
+#if OFFLINE_MODE
+
+        if (RoomCreatedEvent != null)
+            RoomCreatedEvent();
+
+        yield break;
+#else
         using (UnityWebRequest www = UnityWebRequest.Get("http://10.100.89.228:3000/CreateRoom"))
         {
             yield return www.SendWebRequest();
@@ -82,10 +85,9 @@ public class GameData : MonoBehaviour
                 if(RoomCreatedEvent != null)
                     RoomCreatedEvent();
             }
-
-            //if (RoomCreatedEvent != null)
-                //RoomCreatedEvent();
         }
+#endif
+
     }
 
     public void RefreshPlayerData()
@@ -95,6 +97,13 @@ public class GameData : MonoBehaviour
 
     IEnumerator RefreshPlayerData_ctr()
     {
+
+#if OFFLINE_MODE
+
+        HandleRefreshPlayerDataResponse("[{\"Id\":0,\"Name\":\"Bob\"},{\"Id\":1,\"Name\":\"Chris\"}]");
+        yield break;
+
+#else
         //string url = "http://10.100.89.228:3000/GetPlayerInfo";
         string url = "http://10.100.89.228:3000/FakeGetPlayerInfo";
 
@@ -111,9 +120,8 @@ public class GameData : MonoBehaviour
                 string response = www.downloadHandler.text;
                 HandleRefreshPlayerDataResponse(response);
             }
-
-            //HandleRefreshPlayerDataResponse("[{\"Id\":0,\"Name\":\"Bob\"},{\"Id\":1,\"Name\":\"Chris\"}]");
         }
+#endif
     }
 
     void HandleRefreshPlayerDataResponse(string json)
@@ -126,24 +134,43 @@ public class GameData : MonoBehaviour
             int count = n.Count;
             for (int i = 0; i < count; i++)
             {
-                // only add players to GameData if they are not yet added
-                if (GameData.Instance.m_players.Count <= count)
+                int id = n[i]["Id"].AsInt;
+                PlayerData data = null;
+
+                if (!m_playerData.ContainsKey(id))
                 {
-                    PlayerData data = new PlayerData();
-                    data.m_ID = n[i]["Id"].AsInt;
-                    data.m_name = n[i]["Name"];
-
-                    AddPlayer(data.m_ID, data);
+                    data = new PlayerData(id);
+                    AddPlayer(data.ID, data);
                 }
-            }
+                else
+                {
+                    data = m_playerData[id];
+                }
 
-            if (PlayerDataRefreshed != null)
-                PlayerDataRefreshed();
+                data.Name = n[i]["Name"];
+
+
+            }
         }
+
+        if (PlayerDataRefreshed != null)
+            PlayerDataRefreshed();
     }
 
-    IEnumerator RefreshGameResults()
+    public void RefreshGameResults()
     {
+        StartCoroutine(RefreshGameResults_ctr());
+    }
+
+    IEnumerator RefreshGameResults_ctr()
+    {
+
+#if OFFLINE_MODE
+        HandleGameResultsResponse("[{\"Id\":0,\"Choice\":3},{\"Id\":1,\"Choice\":1}]");
+
+        yield break;
+#else
+
         //string url = "http://10.100.89.228:3000/GetResults";
         string url = "http://10.100.89.228:3000/FakeGetResults";
 
@@ -161,6 +188,7 @@ public class GameData : MonoBehaviour
                 HandleGameResultsResponse(response);
             }
         }
+#endif
     }
 
     void HandleGameResultsResponse(string json)
@@ -176,16 +204,18 @@ public class GameData : MonoBehaviour
                 int id = n[i]["Id"].AsInt;
 
                 PlayerData data = GetPlayerDataForID(id);
-                if(data != null)
+                if (data != null)
                 {
-                    PlayOption p = (PlayOption)n[i]["Choice"].AsInt;
-                    data.m_play = p;
+                    PlayerChoice p = (PlayerChoice)n[i]["Choice"].AsInt;
+                    data.Choice = p;
                 }
-            }
 
-            if (PlayerChoiceRefreshed != null)
-                PlayerChoiceRefreshed();
+
+            }
         }
+
+        if (PlayerChoiceRefreshed != null)
+            PlayerChoiceRefreshed();
     }
 
 }

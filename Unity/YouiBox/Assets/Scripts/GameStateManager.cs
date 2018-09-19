@@ -6,6 +6,9 @@ public enum GameStateID { Undefined = -1, CreateRoom, WaitForPlayers, Play, Resu
 
 public class GameStateManager : MonoBehaviour
 {
+    [SerializeField]
+    public List<PlayerCtrl> m_playerControllers = null;
+
     protected Dictionary<GameStateID, GameState> m_gameStates = new Dictionary<GameStateID, GameState>((int)GameStateID.GameStateIDCount);
 
     protected GameState m_currentState  = null;

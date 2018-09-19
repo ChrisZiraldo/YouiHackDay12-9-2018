@@ -9,8 +9,7 @@ public class Play : GameState
     public override GameStateID StateID { get { return GameStateID.Play; } }
 
     private const float m_checkIntervalSeconds = 0.25f;
-    private bool m_gameOver = false;
-
+    
     // Update is called once per frame
     public override void Update()
     {
@@ -20,24 +19,67 @@ public class Play : GameState
     public override void EnterState()
     {
         base.EnterState();
-        StartCoroutine(WaitForResults());
+
+        GameData.Instance.PlayerChoiceRefreshed += OnPlayerChoiceRefreshed;
+
+        OnPlayerChoiceRefreshed();
+    }
+
+    public override void ExitState()
+    {
+        GameData.Instance.PlayerChoiceRefreshed -= OnPlayerChoiceRefreshed;
+
+        base.ExitState();
+    }
+
+    void OnPlayerChoiceRefreshed()
+    {
+        int playerCount = GameData.Instance.PlayerCount;
+        for (int i = 0; i < playerCount; i++)
+        {
+            PlayerData data = GameData.Instance.GetPlayerDataForID(i);
+            SetPlayerData(data);
+        }
+
+        if (AllChoicesComplete())
+        {
+            m_gameStateMgr.ChangeState(GameStateID.Play);
+        }
+        else
+        {
+            StartCoroutine(WaitForResults());
+        }
     }
 
     IEnumerator WaitForResults()
     {
-        m_gameOver = false;
-
-        while (!m_gameOver)
-        {
-            // Poll server for play state
-            //yield return CheckServerState();
-
-            yield return null;
-        }
-
-
+        yield return new WaitForSeconds(m_checkIntervalSeconds);
+        GameData.Instance.RefreshGameResults();
     }
 
+    void SetPlayerData(PlayerData data)
+    {
+        int index = data.ID;
 
+        if (index < m_gameStateMgr.m_playerControllers.Count)
+        {
+            PlayerCtrl player = m_gameStateMgr.m_playerControllers[data.ID];
+            player.SetChoice(data.Choice);
+        }
+    }
+
+    bool AllChoicesComplete()
+    {
+        bool allReady = true;
+
+        int playerCount = GameData.Instance.PlayerCount;
+        for (int i = 0; i < playerCount; i++)
+        {
+            PlayerData data = GameData.Instance.GetPlayerDataForID(i);
+            allReady = allReady && data.Choice != PlayerChoice.Undefined;
+        }
+
+        return allReady;
+    }
 
 }

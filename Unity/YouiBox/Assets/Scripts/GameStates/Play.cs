@@ -43,7 +43,7 @@ public class Play : GameState
 
         if (AllChoicesComplete())
         {
-            m_gameStateMgr.ChangeState(GameStateID.Play);
+            m_gameStateMgr.ChangeState(GameStateID.Results);
         }
         else
         {
@@ -64,7 +64,7 @@ public class Play : GameState
         if (index < m_gameStateMgr.m_playerControllers.Count)
         {
             PlayerCtrl player = m_gameStateMgr.m_playerControllers[data.ID];
-            player.SetChoice(data.Choice);
+            //player.SetChoice(data.Choice);
         }
     }
 

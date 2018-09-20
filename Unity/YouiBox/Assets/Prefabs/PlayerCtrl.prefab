@@ -163,6 +163,7 @@ MonoBehaviour:
   m_scissor: {fileID: 114905420070796262}
   m_rock: {fileID: 114520703384102570}
   m_playerName: {fileID: 114019274222116724}
+  m_animator: {fileID: 95728868605137540}
 --- !u!114 &114312932126580446
 MonoBehaviour:
   m_ObjectHideFlags: 1
